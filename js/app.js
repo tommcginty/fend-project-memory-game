@@ -34,9 +34,7 @@ function displaySymbol(card){
 }
 
 //  - add the card to a *list* of "open" cards (put this functionality in another function that you call from cardClicked)
-function checkMatch (card){
 
-}
   //  - if the list already has another card, check to see if the two cards match
 
 
@@ -51,10 +49,10 @@ function checkMatch (card){
 
 //   + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
 
-
 function cardClicked(evt) {
   if (evt.target.nodeName === 'LI'){ // ← verifies target is desired element
-    console.log('I was clicked: ' + evt.target);
+    let cardFace = evt.target.querySelector('i').className;
+    console.log('I was clicked: ' + cardFace);
     displaySymbol(evt.target);
   }
 }
