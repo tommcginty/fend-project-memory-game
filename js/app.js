@@ -1,5 +1,6 @@
 const deck = document.querySelector('.deck');
 let cardList = [];
+let counter = 0;
 
 /*
  * Create a list that holds all of your cards
@@ -40,6 +41,12 @@ function addToList(card) {
   }
 
   //  - if the list already has another card, check to see if the two cards match
+function checkMatch() {
+  if (cardList[cardList.length - 1]== cardList[cardList.length - 2])
+  	return true;
+  else
+  	return false;
+}
 
 
 //   + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from cardClicked)
@@ -59,6 +66,8 @@ function cardClicked(evt) {
     console.log('I was clicked: ' + cardFace);
     displaySymbol(evt.target);
     addToList(cardFace);
+    if (counter % 2 == 0 && counter > 1)
+      checkMatch();
   }
 }
 
