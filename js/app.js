@@ -91,7 +91,14 @@ function addToCounter(counter){
 
 //   + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
 function gameOver(){
-  //create a div over the 
+  //dispay div over the game
+  document.getElementById('game-over').style.display = 'block';
+  document.getElementById('final-time').textContent = 'Time: ';
+  document.getElementById('final-moves').textContent = 'Moves: ' + counter/2;
+  document.getElementById('final-rating').textContent = 'Rating: ';
+
+  //display message
+  // dispay score & rating
 }
 
 

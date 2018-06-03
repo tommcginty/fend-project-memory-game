@@ -113,7 +113,7 @@ h1 {
  * Styles for game over message
  */
 
-.game-over {
+#game-over {
   display: none;
   z-index: 1;
   position: absolute;
