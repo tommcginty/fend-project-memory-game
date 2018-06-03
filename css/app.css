@@ -52,6 +52,7 @@ h1 {
 }
 
 .deck .card {
+  transform: rotateY(180);
     height: 125px;
     width: 125px;
     background: #2e3d49;
