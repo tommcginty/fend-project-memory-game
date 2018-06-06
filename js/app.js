@@ -1,8 +1,10 @@
 const deck = document.querySelector('.deck');
 let cardList = [];
 let counter = 0;
-let items = document.querySelectorAll(".deck li"),
+let items = document.querySelectorAll('.deck li'),
     tab = [], index;
+const listItem = document.createElement('li');
+
 
 // add values to the array
 for(let i = 0; i < items.length; i++){
@@ -31,14 +33,9 @@ let deckOfCards = ['fa-diamond', 'fa-diamond',
                   'fa-bomb', 'fa-bomb'
             ];
 
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
-// Shuffle function from http://stackoverflow.com/a/2450976
+
+
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -51,7 +48,21 @@ function shuffle(array) {
     }
 
     return array;
+}//Display the cards on the page
+//  - shuffle the list of cards using the provided "shuffle" method above
+shuffle(deckOfCards);
+
+//   - loop through each card and create its HTML
+//   - add each card's HTML to the page
+let ul = document.querySelector(".deck");
+let listItems = ul.getElementsByTagName("li");
+undefined
+for (let i = 0; i < items.length; ++i) {
+  listItems[i].innerHTML = '<i class="fa ' + deckOfCards[i] + '"></i>';
 }
+
+// Shuffle function from http://stackoverflow.com/a/2450976
+
 
 
 // - display the card's symbol (put this functionality in another function that you call from cardClicked)
