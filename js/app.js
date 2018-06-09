@@ -116,7 +116,7 @@ function gameOver(){
   document.getElementById('final-time').textContent = 'Time: ';
   document.getElementById('final-moves').textContent = 'Moves: ' + counter/2;
   document.getElementById('final-rating').textContent = 'Rating: ';
-  document.getElementById('final-rating').innerHTML = rating;
+  document.getElementById('final-rating').appendChild = rating;
 
 
   //display message
@@ -125,7 +125,7 @@ function gameOver(){
 
 
 function cardClicked() {
-  if (items[index].className != 'card show'){
+  if (items[index].className == 'card'){
     counter++;
     if (counter % 8 == 0)
       rating.removeChild(rating.firstChild);
