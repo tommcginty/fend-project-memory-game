@@ -94,10 +94,15 @@ function matchCards(){
 function flipCards() {
   setTimeout(function(){
   for (let i = 0; i < 2; i++){
-    tab[cardList[0]].classList.remove('show', 'open');
-    cardList.shift();
+    tab[cardList[i]].classList.add('no-match');
     };
   }, 1000);
+  setTimeout(function(){
+  for (let i = 0; i < 2; i++){
+    tab[cardList[0]].classList.remove('show', 'open', 'no-match');
+    cardList.shift();
+    };
+  }, 2000);
 }
 
 //   + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
