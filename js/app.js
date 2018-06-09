@@ -4,6 +4,7 @@ let counter = 0;
 let items = document.querySelectorAll('.deck li'),
     tab = [], index;
 const listItem = document.createElement('li');
+let rating = document.querySelector('.stars');
 
 
 // add values to the array
@@ -115,6 +116,8 @@ function gameOver(){
   document.getElementById('final-time').textContent = 'Time: ';
   document.getElementById('final-moves').textContent = 'Moves: ' + counter/2;
   document.getElementById('final-rating').textContent = 'Rating: ';
+  document.getElementById('final-rating').innerHTML = rating;
+
 
   //display message
   // dispay score & rating
@@ -124,6 +127,9 @@ function gameOver(){
 function cardClicked() {
   if (items[index].className != 'card show'){
     counter++;
+    if (counter % 8 == 0)
+      rating.removeChild(rating.firstChild);
+
     let cardFace = items[index].querySelector('i').className;
     console.log('I was clicked: ' + index);
     displaySymbol(items[index]);
@@ -140,7 +146,6 @@ function cardClicked() {
       gameOver();
   };
 }
-
 
 //set up the event listener for a card. If a card is clicked (cardClicked):
 deck.addEventListener('click', cardClicked);
