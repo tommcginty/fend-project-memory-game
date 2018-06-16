@@ -9,14 +9,13 @@ let rating = document.querySelector('.stars');
 
 // add values to the array
 for(let i = 0; i < items.length; i++){
-tab.push(items[i]);
+  tab.push(items[i]);
 }
 
 // get selected element index
 for(var i = 0; i < items.length; i++)
 {
-items[i].onclick = function(){
-
+  items[i].onclick = function(){
    index = tab.indexOf(this);
    return index;
 };
@@ -116,14 +115,20 @@ function addToCounter(counter){
 
 //   + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
 function gameOver(){
-  //dispay div over the game
   document.getElementById('game-over').style.display = 'block';
   document.getElementById('final-time').textContent = 'Time: ';
   document.getElementById('final-moves').textContent = 'Moves: ' + counter/2;
-  document.getElementById('final-rating').textContent = 'Rating: ';
-  document.getElementById('final-rating').appendChild = rating;
-
-
+  if (document.querySelector('.stars').getElementsByTagName('li').length >= 1){
+    let finalRating = rating.cloneNode(true);
+    var newItem = document.createElement("LI");
+    var textnode = document.createTextNode("Rating:");
+    newItem.appendChild(textnode);
+    document.getElementById('final-rating').appendChild(finalRating);
+    finalRating.insertBefore(newItem, finalRating.childNodes[0]);
+  }
+  else {
+    document.getElementById('final-rating').textContent = 'Rating: None';
+}
   //display message
   // dispay score & rating
 }
