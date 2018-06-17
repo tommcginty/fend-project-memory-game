@@ -54,7 +54,7 @@ h1 {
 .deck .card {
     z-index: 0;
     transform: rotateY(180deg);
-    transition: 0.6s;
+    transition: 0.5s;
     transform-style: preserve-3d;
     height: 125px;
     width: 125px;
@@ -78,7 +78,7 @@ h1 {
 .deck .card.show {
     font-size: 33px;
     transform: rotateY(0deg);
-    transition: 0.6s;
+    transition: 0.5s;
     transform-style: preserve-3d;
     position: relative;
 }

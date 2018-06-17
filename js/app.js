@@ -7,6 +7,9 @@ let items = document.querySelectorAll('.deck li'),
 let rating = document.querySelector('.stars');
 let seconds = 0, minutes = 0, time;
 let timeKeeper = document.querySelector('.clock');
+let restart = document.querySelector('.fa-repeat');
+let replay = document.getElementById('replay');
+let openCards = 0;
 
 //timmer functions
 function increaseTime() {
@@ -20,13 +23,12 @@ function increaseTime() {
     else {
       timeKeeper.textContent = minutes + ":" + seconds;
     }
-    timer();
 }
 
 function timer() {
-  time = setTimeout(increaseTime, 1000);
+  time = setInterval(increaseTime, 1000);
 }
-timer();
+
 // add values to the array
 for(let i = 0; i < items.length; i++){
   tab.push(items[i]);
@@ -53,9 +55,6 @@ let deckOfCards = ['fa-diamond', 'fa-diamond',
                   'fa-bomb', 'fa-bomb'
             ];
 
-
-
-
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
 
@@ -68,18 +67,22 @@ function shuffle(array) {
     }
 
     return array;
-}//Display the cards on the page
+}
+//Display the cards on the page
 //  - shuffle the list of cards using the provided "shuffle" method above
 shuffle(deckOfCards);
 
+function dealCards() {
 //   - loop through each card and create its HTML
 //   - add each card's HTML to the page
-let ul = document.querySelector(".deck");
-let listItems = ul.getElementsByTagName("li");
-undefined
-for (let i = 0; i < items.length; ++i) {
-  listItems[i].innerHTML = '<i class="fa ' + deckOfCards[i] + '"></i>';
+  let ul = document.querySelector(".deck");
+  let listItems = ul.getElementsByTagName("li");
+  for (let i = 0; i < items.length; ++i) {
+    listItems[i].innerHTML = '<i class="fa ' + deckOfCards[i] + '"></i>';
+  }
 }
+dealCards();
+
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 
@@ -115,17 +118,17 @@ function flipCards() {
   for (let i = 0; i < 2; i++){
     tab[cardList[i]].classList.add('no-match');
     };
-  }, 1000);
+  }, 200);
   setTimeout(function(){
   for (let i = 0; i < 2; i++){
     tab[cardList[0]].classList.remove('show', 'open', 'no-match');
     cardList.shift();
     };
-  }, 2000);
+  }, 1000);
 }
 
 //   + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
-function addToCounter(counter){
+function addToMoves(counter){
   let moves = counter/2;
   if (moves === 1)
     document.getElementById('moves').textContent = moves + ' Move';
@@ -150,32 +153,65 @@ function gameOver(){
   else {
     document.getElementById('final-rating').textContent = 'Rating: None';
 }
-  //display message
-  // dispay score & rating
+  replay.addEventListener('click', playAgain)
 }
 
 function cardClicked() {
+  if (counter == 0)
+    timer();
   if (items[index].className == 'card'){
     counter++;
-    if (counter % 8 == 0)
-      rating.removeChild(rating.firstChild);
-
+    if (document.querySelector('.stars').getElementsByTagName('li').length >= 1 && counter % 20 == 0){
+        let loseStar = document.querySelector('.fa-star');
+        rating.removeChild(rating.firstChild); // lose a star every 10 moves
+      }
     let cardFace = items[index].querySelector('i').className;
     console.log('I was clicked: ' + index);
     displaySymbol(items[index]);
     addToCardList(index);
     if (counter % 2 == 0){
+      deck.removeEventListener('click', cardClicked);
       if (!checkMatch())
         flipCards();
       else
         matchCards();
 
-      addToCounter(counter);
+      addToMoves(counter);
       };
     if (cardList.length == 16)
+    setTimeout(function(){
       gameOver();
+    }, 1000);
   };
+  setTimeout(function(){
+    deck.addEventListener('click', cardClicked);
+  }, 2000);
+}
+
+function playAgain() {
+  document.getElementById('game-over').style.display = 'none';
+  restartGame();
+}
+
+function restartGame(){
+  clearTimeout(time);
+  seconds = 0;
+  minutes = 0;
+  counter = 0;
+  timeKeeper.innerHTML = '0:00';
+  document.getElementById('moves').textContent = counter + ' Moves';
+  rating.innerHTML = '<li><i class="fa fa-star"></i></li>' +
+                        '<li><i class="fa fa-star"></i></li>' +
+                        '<li><i class="fa fa-star"></i></li>';
+  for (let i = 0; i < cardList.length; i++){
+    tab[cardList[i]].classList.remove('show', 'open', 'match');
+    }
+    shuffle(deckOfCards);
+    dealCards();
+    cardList = [];
 }
 
 //set up the event listener for a card. If a card is clicked (cardClicked):
+
 deck.addEventListener('click', cardClicked);
+restart.addEventListener('click', restartGame);
