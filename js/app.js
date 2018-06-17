@@ -1,5 +1,5 @@
-const deck = document.querySelector('.deck');
-const listItem = document.createElement('li');
+const deck = document.querySelector('.deck'),
+      listItem = document.createElement('li');
 let cardList = [];
 let counter = 0;
 let items = document.querySelectorAll('.deck li'),
@@ -131,27 +131,40 @@ function flipCards() {
 function addToMoves(counter){
   let moves = counter/2;
   if (moves === 1)
-    document.getElementById('moves').textContent = moves + ' Move';
+    document.querySelector('.moves p').textContent = moves + ' Move';
   else
-    document.getElementById('moves').textContent = moves + ' Moves';
+    document.querySelector('.moves p').textContent = moves + ' Moves';
 }
 
 //   + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
 function gameOver(){
   clearTimeout(time);
-  document.getElementById('game-over').style.display = 'block';
+  let gameOverDiv = document.getElementById('game-over');
+
+  if(document.getElementById('final-rating')){
+    oldRating = document.getElementById('final-rating');
+    gameOverDiv.removeChild(oldRating);
+  }
+
+  let ratingMessage = document.createElement('P');
+  let button = document.getElementById('replay');
+  ratingMessage.setAttribute('id', 'final-rating');
+  gameOverDiv.insertBefore(ratingMessage, button);
+
+  gameOverDiv.style.display = 'block';
   document.getElementById('final-time').textContent = 'Time: ' + minutes + ':' + (seconds > 9 ? seconds : '0' + seconds);
   document.getElementById('final-moves').textContent = 'Moves: ' + counter/2;
+
   if (document.querySelector('.stars').getElementsByTagName('li').length >= 1){
     let finalRating = rating.cloneNode(true);
     var newItem = document.createElement("LI");
-    var textnode = document.createTextNode("Rating:");
+    var textnode = document.createTextNode("Rating: \u00A0");
     newItem.appendChild(textnode);
-    document.getElementById('final-rating').appendChild(finalRating);
+    ratingMessage.appendChild(finalRating);
     finalRating.insertBefore(newItem, finalRating.childNodes[0]);
   }
   else {
-    document.getElementById('final-rating').textContent = 'Rating: None';
+    finalRating.textContent = 'Rating: None';
 }
   replay.addEventListener('click', playAgain)
 }
@@ -166,7 +179,6 @@ function cardClicked() {
         rating.removeChild(rating.firstChild); // lose a star every 10 moves
       }
     let cardFace = items[index].querySelector('i').className;
-    console.log('I was clicked: ' + index);
     displaySymbol(items[index]);
     addToCardList(index);
     if (counter % 2 == 0){
@@ -199,7 +211,7 @@ function restartGame(){
   minutes = 0;
   counter = 0;
   timeKeeper.innerHTML = '0:00';
-  document.getElementById('moves').textContent = counter + ' Moves';
+  document.querySelector('.moves p').textContent = counter + ' Moves';
   rating.innerHTML = '<li><i class="fa fa-star"></i></li>' +
                         '<li><i class="fa fa-star"></i></li>' +
                         '<li><i class="fa fa-star"></i></li>';
