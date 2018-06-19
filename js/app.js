@@ -1,59 +1,45 @@
 const deck = document.querySelector('.deck'),
-      listItem = document.createElement('li');
-let cardList = [];
-let counter = 0;
-let items = document.querySelectorAll('.deck li'),
-    tab = [], index;
-let rating = document.querySelector('.stars');
-let seconds = 0, minutes = 0, time;
-let timeKeeper = document.querySelector('.clock');
-let restart = document.querySelector('.fa-repeat');
-let replay = document.getElementById('replay');
-let openCards = 0;
+      listItem = document.createElement('li'),
+      items = document.querySelectorAll('.deck li'),
+      rating = document.querySelector('.stars'),
+      timeKeeper = document.querySelector('.clock'),
+      restart = document.querySelector('.fa-repeat'),
+      replay = document.getElementById('replay'),
+      gameOverDiv = document.getElementById('game-over'),
+      button = document.getElementById('replay');
 
-//timmer functions
-function increaseTime() {
-  seconds++;
-    if (seconds > 59){
-      seconds = 0;
-      minutes++;
-    }
-    if (seconds < 10)
-      timeKeeper.textContent = minutes + ":0" + seconds;
-    else {
-      timeKeeper.textContent = minutes + ":" + seconds;
-    }
-}
-
-function timer() {
-  time = setInterval(increaseTime, 1000);
-}
+let deckOfCards = ['fa-diamond', 'fa-diamond',
+    'fa-paper-plane-o', 'fa-paper-plane-o',
+    'fa-anchor', 'fa-anchor',
+    'fa-bolt', 'fa-bolt',
+    'fa-cube', 'fa-cube',
+    'fa-leaf', 'fa-leaf',
+    'fa-bicycle', 'fa-bicycle',
+    'fa-bomb', 'fa-bomb'],
+    cardList = [],
+    tab = [],
+    counter = 0,
+    seconds = 0,
+    minutes = 0,
+    time,
+    index;
 
 // add values to the array
-for(let i = 0; i < items.length; i++){
-  tab.push(items[i]);
-}
+items.forEach(function(item) {
+  tab.push(item)
+});
 
 // get selected element index
-for(var i = 0; i < items.length; i++)
-{
-  items[i].onclick = function(){
+items.forEach(function (item){
+  item.onclick = function(){
    index = tab.indexOf(this);
    return index;
-};
-}
+ };
+});
+
 /*
- * Create a list that holds all of your cards
- */
-let deckOfCards = ['fa-diamond', 'fa-diamond',
-                  'fa-paper-plane-o', 'fa-paper-plane-o',
-                  'fa-anchor', 'fa-anchor',
-                  'fa-bolt', 'fa-bolt',
-                  'fa-cube', 'fa-cube',
-                  'fa-leaf', 'fa-leaf',
-                  'fa-bicycle', 'fa-bicycle',
-                  'fa-bomb', 'fa-bomb'
-            ];
+** functions
+*/
 
 function shuffle(array) {
     var currentIndex = array.length, temporaryValue, randomIndex;
@@ -66,39 +52,45 @@ function shuffle(array) {
         array[randomIndex] = temporaryValue;
     }
 
+
     return array;
 }
-//Display the cards on the page
-//  - shuffle the list of cards using the provided "shuffle" method above
-shuffle(deckOfCards);
+
+//timmer functions
+function increaseTime() {
+  seconds++;
+    if (seconds > 59){
+      seconds = 0;
+      minutes++;
+    }
+    if (seconds < 10)
+      timeKeeper.textContent = minutes + ':0' + seconds;
+    else {
+      timeKeeper.textContent = minutes + ':' + seconds;
+    }
+}
+
+function timer() {
+  time = setInterval(increaseTime, 1000);
+}
 
 function dealCards() {
-//   - loop through each card and create its HTML
-//   - add each card's HTML to the page
-  let ul = document.querySelector(".deck");
-  let listItems = ul.getElementsByTagName("li");
-  for (let i = 0; i < items.length; ++i) {
+  let ul = document.querySelector('.deck');
+  let listItems = ul.getElementsByTagName('li');
+  items.forEach(function(item, i) {
     listItems[i].innerHTML = '<i class="fa ' + deckOfCards[i] + '"></i>';
-  }
-}
-dealCards();
+  });
+};
 
-
-// Shuffle function from http://stackoverflow.com/a/2450976
-
-
-
-// - display the card's symbol (put this functionality in another function that you call from cardClicked)
 function displaySymbol(card){
   card.classList.add('open', 'show');
 }
 
-//  - add the card to a *list* of "open" cards (put this functionality in another function that you call from cardClicked)
+// keeps track of open cards
 function addToCardList(cardIndex) {
   cardList.unshift(cardIndex);
   }
 
-  //  - if the list already has another card, check to see if the two cards match
 function checkMatch() {
   if (tab[cardList[0]].innerHTML == tab[cardList[1]].innerHTML)
   	return true;
@@ -106,13 +98,11 @@ function checkMatch() {
   	return false;
 }
 
-//   + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from cardClicked)
 function matchCards(){
   for (let i = 0; i < 2; i++)
     tab[cardList[i]].classList.add('match');
 }
 
-//   + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
 function flipCards() {
   setTimeout(function(){
   for (let i = 0; i < 2; i++){
@@ -127,7 +117,7 @@ function flipCards() {
   }, 1000);
 }
 
-//   + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+// One move is two flips
 function addToMoves(counter){
   let moves = counter/2;
   if (moves === 1)
@@ -136,51 +126,58 @@ function addToMoves(counter){
     document.querySelector('.moves p').textContent = moves + ' Moves';
 }
 
-//   + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
 function gameOver(){
   clearTimeout(time);
-  let gameOverDiv = document.getElementById('game-over');
 
-  if(document.getElementById('final-rating')){
-    oldRating = document.getElementById('final-rating');
+// If the player has played more than one game,
+// this will clear the previous rating
+  if(document.getElementById('final-stars')){
+    let oldRating = document.getElementById('final-stars');
     gameOverDiv.removeChild(oldRating);
+    document.getElementById('final-rating').textContent = 'Rating:';
   }
+  else
+    document.getElementById('final-rating').textContent = 'Rating:';
 
-  let ratingMessage = document.createElement('P');
-  let button = document.getElementById('replay');
-  ratingMessage.setAttribute('id', 'final-rating');
-  gameOverDiv.insertBefore(ratingMessage, button);
-
+// reveal the modal window with the move & time totals
   gameOverDiv.style.display = 'block';
   document.getElementById('final-time').textContent = 'Time: ' + minutes + ':' + (seconds > 9 ? seconds : '0' + seconds);
   document.getElementById('final-moves').textContent = 'Moves: ' + counter/2;
 
+// check the star rating and display
   if (document.querySelector('.stars').getElementsByTagName('li').length >= 1){
     let finalRating = rating.cloneNode(true);
-    var newItem = document.createElement("LI");
-    var textnode = document.createTextNode("Rating: \u00A0");
-    newItem.appendChild(textnode);
-    ratingMessage.appendChild(finalRating);
-    finalRating.insertBefore(newItem, finalRating.childNodes[0]);
+    finalRating.removeAttribute('class');
+    finalRating.setAttribute('id', 'final-stars');
+    gameOverDiv.insertBefore(finalRating, button);
   }
-  else {
-    finalRating.textContent = 'Rating: None';
-}
-  replay.addEventListener('click', playAgain)
+  else
+    document.getElementById('final-rating').textContent = 'Rating: No Stars';
+
+replay.addEventListener('click', playAgain)
 }
 
+// Main function for gameplay
 function cardClicked() {
+// start the timer when the first card is clicked
   if (counter == 0)
     timer();
+
   if (items[index].className == 'card'){
     counter++;
+
+ // lose a star every 10 moves
     if (document.querySelector('.stars').getElementsByTagName('li').length >= 1 && counter % 20 == 0){
-        let loseStar = document.querySelector('.fa-star');
-        rating.removeChild(rating.firstChild); // lose a star every 10 moves
+        rating.removeChild(rating.firstChild);
       }
+
     let cardFace = items[index].querySelector('i').className;
     displaySymbol(items[index]);
+
     addToCardList(index);
+
+// Check to see if cards match.
+// The event listener is removed, otherwise you can keep flipping cards
     if (counter % 2 == 0){
       deck.removeEventListener('click', cardClicked);
       if (!checkMatch())
@@ -190,11 +187,15 @@ function cardClicked() {
 
       addToMoves(counter);
       };
+
+// If all of the cards are flipped, game over
     if (cardList.length == 16)
     setTimeout(function(){
       gameOver();
     }, 1000);
   };
+
+// Event listener is added back, after a delay
   setTimeout(function(){
     deck.addEventListener('click', cardClicked);
   }, 2000);
@@ -205,6 +206,7 @@ function playAgain() {
   restartGame();
 }
 
+// This function resets & shuffles the deck and resets the score panel
 function restartGame(){
   clearTimeout(time);
   seconds = 0;
@@ -213,17 +215,23 @@ function restartGame(){
   timeKeeper.innerHTML = '0:00';
   document.querySelector('.moves p').textContent = counter + ' Moves';
   rating.innerHTML = '<li><i class="fa fa-star"></i></li>' +
-                        '<li><i class="fa fa-star"></i></li>' +
-                        '<li><i class="fa fa-star"></i></li>';
+                     '<li><i class="fa fa-star"></i></li>' +
+                     '<li><i class="fa fa-star"></i></li>';
+// Flipp the cards back
   for (let i = 0; i < cardList.length; i++){
     tab[cardList[i]].classList.remove('show', 'open', 'match');
     }
+
     shuffle(deckOfCards);
     dealCards();
     cardList = [];
 }
+/*
+** The gameplay starts here
+*/
 
-//set up the event listener for a card. If a card is clicked (cardClicked):
+shuffle(deckOfCards);
+dealCards();
 
 deck.addEventListener('click', cardClicked);
 restart.addEventListener('click', restartGame);

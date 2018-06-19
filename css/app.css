@@ -57,7 +57,7 @@ h1 {
     transition: 0.5s;
     transform-style: preserve-3d;
     height: 125px;
-    width: 125px;
+    width: 22%;
     background: #2e3d49;
     font-size: 0;
     color: #ffffff;
@@ -143,7 +143,6 @@ h1 {
   display: none;
   z-index: 1;
   position: absolute;
-  text-align: center;
   background-color: #fefefe;
   margin: auto;
   padding: 20px;
@@ -151,8 +150,54 @@ h1 {
   width: 40%;
   border-radius: 10px;
   box-shadow: 0 0 10px #888888;
+  text-align: center;
 }
-#final-rating {
-  text-align: left;
-  padding-left: 34px;
+
+#final-stars {
+  padding: 0;
+}
+
+#final-stars li {
+  list-style: none;
+  display: inline-block;
+}
+#replay {
+  font-size: 1.2em;
+  color: white;
+  background: #02ccba;
+  height: 48px;
+}
+
+/*
+ * Responsive Styles
+ */
+
+@media only screen and (max-width: 800px) {
+  .score-panel {
+    width: 85%;
+    font-size: 1.2em;
+  }
+}
+
+@media only screen and (max-width: 660px) {
+  .score-panel {
+    width: 100%;
+    font-size: 1em;
+  }
+
+  .deck {
+    width: 100%;
+    min-height: 425px;
+    box-shadow: none;
+    padding: 10px;
+  }
+
+  .deck .card {
+    height: 75px;
+  }
+
+  #game-over {
+    width: 50%;
+  }
+
 }
